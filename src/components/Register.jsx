@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from "../congig"; // ✅ Import central API URL
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -8,8 +9,8 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [photo, setPhoto] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [message, setMessage] = useState(""); // ✅ Message state
-  const [isError, setIsError] = useState(false); // ✅ To style error/success
+  const [message, setMessage] = useState(""); 
+  const [isError, setIsError] = useState(false); 
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -23,14 +24,14 @@ const Register = () => {
         formData.append("photo", photo);
       }
 
-      await axios.post("http://localhost:5000/register", formData, {
+      await axios.post(`${API_BASE_URL}/register`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
       setMessage("Registration successful. Redirecting to login...");
       setIsError(false);
 
-      setTimeout(() => navigate("/login"), 1500); // redirect after 1.5 sec
+      setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
       setMessage(err.response?.data?.message || "Registration failed");
       setIsError(true);
@@ -52,7 +53,6 @@ const Register = () => {
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
 
-        {/* ✅ Show message if exists */}
         {message && (
           <div
             className={`mb-4 p-2 text-center rounded ${
@@ -64,7 +64,6 @@ const Register = () => {
         )}
 
         <form onSubmit={handleRegister} className="space-y-4">
-          {/* Name */}
           <div>
             <input
               type="text"
@@ -76,7 +75,6 @@ const Register = () => {
             />
           </div>
 
-          {/* Email */}
           <div>
             <input
               type="email"
@@ -88,7 +86,6 @@ const Register = () => {
             />
           </div>
 
-          {/* Password */}
           <div>
             <input
               type="password"
@@ -100,7 +97,6 @@ const Register = () => {
             />
           </div>
 
-          {/* Photo */}
           <div>
             <input
               type="file"
@@ -110,7 +106,6 @@ const Register = () => {
             />
           </div>
 
-          {/* ✅ Show preview */}
           {preview && (
             <div className="text-center">
               <img
@@ -122,7 +117,6 @@ const Register = () => {
             </div>
           )}
 
-          {/* Register Button */}
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"

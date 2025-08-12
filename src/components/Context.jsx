@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
+import API_BASE_URL from "../congig"; // ✅ import API base URL
 
 const Context = createContext();
 
@@ -13,7 +14,7 @@ export const AuthProvider = ({ children }) => {
   const fetchUser = async () => {
     if (auth.token) {
       try {
-        const res = await axios.get("http://localhost:5000/api/user", {
+        const res = await axios.get(`${API_BASE_URL}/api/user`, {
           headers: { Authorization: `Bearer ${auth.token}` },
         });
         setAuth((prev) => ({ ...prev, user: res.data }));
@@ -29,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
   const updateProfile = async (formData) => {
     try {
-      const res = await axios.patch("http://localhost:5000/api/user", formData, {
+      const res = await axios.patch(`${API_BASE_URL}/api/user`, formData, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
           "Content-Type": "multipart/form-data",

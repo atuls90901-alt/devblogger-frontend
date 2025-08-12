@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import Context from "./Context";
-
-const API_URL = "http://localhost:5000";
+import API_BASE_URL from "../congig"; // Import your base API URL
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
@@ -13,14 +12,14 @@ const AdminDashboard = () => {
   const getFullImageUrl = (path) => {
     if (!path) return null;
     if (path.startsWith("http")) return path;
-    if (path.startsWith("/uploads")) return `${API_URL}${path}`;
-    return `${API_URL}/uploads/${path}`;
+    if (path.startsWith("/uploads")) return `${API_BASE_URL}${path}`;
+    return `${API_BASE_URL}/uploads/${path}`;
   };
 
   // Fetch all users
   const fetchUsers = async () => {
     try {
-      const res = await axios.get(`${API_URL}/users`, {
+      const res = await axios.get(`${API_BASE_URL}/users`, {
         headers: { Authorization: `Bearer ${auth.token}` },
       });
       setUsers(res.data);
@@ -32,7 +31,7 @@ const AdminDashboard = () => {
   // Fetch all posts
   const fetchPosts = async () => {
     try {
-      const res = await axios.get(`${API_URL}/all`);
+      const res = await axios.get(`${API_BASE_URL}/all`);
       setPosts(res.data);
     } catch (err) {
       console.error("Error fetching posts:", err);
@@ -48,7 +47,7 @@ const AdminDashboard = () => {
   const handleBlockUser = async (id) => {
     try {
       await axios.put(
-        `${API_URL}/block/${id}`,
+        `${API_BASE_URL}/block/${id}`,
         {},
         { headers: { Authorization: `Bearer ${auth.token}` } }
       );
@@ -61,7 +60,7 @@ const AdminDashboard = () => {
   // Delete user
   const handleDeleteUser = async (id) => {
     try {
-      await axios.delete(`${API_URL}/user/${id}`, {
+      await axios.delete(`${API_BASE_URL}/user/${id}`, {
         headers: { Authorization: `Bearer ${auth.token}` },
       });
       fetchUsers();
@@ -74,7 +73,7 @@ const AdminDashboard = () => {
   // Delete post
   const handleDeletePost = async (id) => {
     try {
-      await axios.delete(`${API_URL}/post/${id}`, {
+      await axios.delete(`${API_BASE_URL}/post/${id}`, {
         headers: { Authorization: `Bearer ${auth.token}` },
       });
       setPosts(posts.filter((p) => p._id !== id));
@@ -93,7 +92,10 @@ const AdminDashboard = () => {
       {auth.user && (
         <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-200 flex items-center space-x-4">
           <img
-            src={getFullImageUrl(auth.user.photo) || "https://via.placeholder.com/100"}
+            src={
+              getFullImageUrl(auth.user.photo) ||
+              "https://via.placeholder.com/100"
+            }
             alt={auth.user.name}
             className="w-20 h-20 rounded-full object-cover border"
           />
@@ -109,7 +111,9 @@ const AdminDashboard = () => {
 
       {/* Users Section */}
       <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
-        <h3 className="text-2xl font-semibold mb-4 text-gray-700">Manage Users</h3>
+        <h3 className="text-2xl font-semibold mb-4 text-gray-700">
+          Manage Users
+        </h3>
         <div className="overflow-x-auto">
           <table className="min-w-full border border-gray-200 rounded-lg">
             <thead>
@@ -142,7 +146,9 @@ const AdminDashboard = () => {
                     </td>
                     <td className="py-2 px-4 border-b">{user.name}</td>
                     <td className="py-2 px-4 border-b">{user.email}</td>
-                    <td className="py-2 px-4 border-b capitalize">{user.role}</td>
+                    <td className="py-2 px-4 border-b capitalize">
+                      {user.role}
+                    </td>
                     <td className="py-2 px-4 border-b">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-semibold ${
@@ -177,7 +183,9 @@ const AdminDashboard = () => {
 
       {/* Posts Section */}
       <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
-        <h3 className="text-2xl font-semibold mb-4 text-gray-700">Manage Posts</h3>
+        <h3 className="text-2xl font-semibold mb-4 text-gray-700">
+          Manage Posts
+        </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
             <div

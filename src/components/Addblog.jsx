@@ -1,7 +1,9 @@
+
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Context from "./Context";
+import API_BASE_URL from "../congig"; // Import the API_BASE_URL
 
 const Addblog = () => {
   const [title, setTitle] = useState("");
@@ -26,7 +28,7 @@ const Addblog = () => {
     if (image) formData.append("image", image);
 
     try {
-      await axios.post("http://localhost:5000/create", formData, {
+      await axios.post(`${API_BASE_URL}/create`, formData, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
           "Content-Type": "multipart/form-data",

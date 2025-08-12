@@ -3,8 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import Context from "./Context";
-
-const API_URL = "http://localhost:5000";
+import API_BASE_URL from "../congig"; // ✅ Import your global API URL
 
 const BlogDetails = () => {
   const { id } = useParams();
@@ -16,10 +15,9 @@ const BlogDetails = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axios.get(`${API_URL}/blog/${id}`);
+        const res = await axios.get(`${API_BASE_URL}/blog/${id}`);
         setPost(res.data);
 
-        // Determine if current user liked it
         if (auth.token) {
           const payload = JSON.parse(atob(auth.token.split(".")[1]));
           const userId = payload.id || payload.sub;
@@ -39,14 +37,14 @@ const BlogDetails = () => {
     }
     try {
       const res = await axios.post(
-        `${API_URL}/like/${id}`,
+        `${API_BASE_URL}/like/${id}`,
         {},
         { headers: { Authorization: `Bearer ${auth.token}` } }
       );
       setLiked(res.data.liked);
       setPost((prev) => ({
         ...prev,
-        likes: new Array(res.data.totalLikes).fill("user"), // just for count display
+        likes: new Array(res.data.totalLikes).fill("user"),
       }));
     } catch (err) {
       console.error("Error liking post:", err);
@@ -60,12 +58,12 @@ const BlogDetails = () => {
     }
     try {
       await axios.post(
-        `${API_URL}/comment/${id}`,
+        `${API_BASE_URL}/comment/${id}`,
         { text: commentText },
         { headers: { Authorization: `Bearer ${auth.token}` } }
       );
       setCommentText("");
-      const res = await axios.get(`${API_URL}/blog/${id}`);
+      const res = await axios.get(`${API_BASE_URL}/blog/${id}`);
       setPost(res.data);
     } catch (err) {
       console.error("Error adding comment:", err);

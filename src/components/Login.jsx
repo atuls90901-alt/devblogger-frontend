@@ -3,6 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import Context from "./Context";
+import API_BASE_URL from "../congig"; // ✅ Import central API URL
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,7 +16,7 @@ const Login = () => {
     e.preventDefault();
     setMessage("");
     try {
-      const res = await axios.post("http://localhost:5000/login", { email, password });
+      const res = await axios.post(`${API_BASE_URL}/login`, { email, password });
       Cookies.set("token", res.data.token, { expires: 1 });
       localStorage.setItem("user", JSON.stringify(res.data.user));
       setAuth({ token: res.data.token, user: res.data.user });
@@ -79,4 +80,3 @@ const Login = () => {
 };
 
 export default Login;
-

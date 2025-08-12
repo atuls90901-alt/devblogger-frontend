@@ -3,8 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import Context from "./Context";
-
-const API_URL = "http://localhost:5000";
+import API_BASE_URL from "../congig"; // ✅ Use centralized API URL
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -14,7 +13,7 @@ const Home = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get(`${API_URL}/all`);
+        const res = await axios.get(`${API_BASE_URL}/all`);
         setPosts(res.data);
 
         if (auth.token) {
@@ -40,7 +39,7 @@ const Home = () => {
     }
     try {
       const res = await axios.post(
-        `${API_URL}/like/${postId}`,
+        `${API_BASE_URL}/like/${postId}`,
         {},
         { headers: { Authorization: `Bearer ${auth.token}` } }
       );

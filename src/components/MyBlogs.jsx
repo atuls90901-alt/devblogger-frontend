@@ -2,13 +2,13 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { FaEdit, FaTrash, FaCheck, FaTimes } from "react-icons/fa";
 import Context from "./Context";
+import API_BASE_URL from "../congig"; // ✅ Centralized API URL
 
-const API_URL = "http://localhost:5000";
 const placeholderPhoto = "https://via.placeholder.com/150";
 
 const getImageUrl = (url) => {
   if (!url) return null;
-  return url.startsWith("http") ? url : `${API_URL}${url}`;
+  return url.startsWith("http") ? url : `${API_BASE_URL}${url}`;
 };
 
 const MyBlogs = () => {
@@ -22,7 +22,7 @@ const MyBlogs = () => {
 
   const fetchMyPosts = async () => {
     try {
-      const res = await axios.get(`${API_URL}/my`, {
+      const res = await axios.get(`${API_BASE_URL}/my`, {
         headers: { Authorization: `Bearer ${auth.token}` },
       });
       setPosts(res.data);
@@ -37,7 +37,7 @@ const MyBlogs = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${API_URL}/delete/${id}`, {
+      await axios.delete(`${API_BASE_URL}/delete/${id}`, {
         headers: { Authorization: `Bearer ${auth.token}` },
       });
       setPosts(posts.filter((p) => p._id !== id));
@@ -67,7 +67,7 @@ const MyBlogs = () => {
       formData.append("content", editContent);
       if (editImage) formData.append("image", editImage);
 
-      await axios.put(`${API_URL}/update/${id}`, formData, {
+      await axios.put(`${API_BASE_URL}/update/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
           "Content-Type": "multipart/form-data",
