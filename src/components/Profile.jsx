@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import Context from "../context/Context"; // your Auth Context
+import Context from "./Context"; // your Auth Context
 import API_BASE_URL from "../congig";
 
 const Profile = () => {
